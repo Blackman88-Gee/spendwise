@@ -1,0 +1,36 @@
+<?xml version="1.0" encoding="UTF-8"?>
+
+<?import javafx.geometry.Insets?>
+<?import javafx.scene.control.Button?>
+<?import javafx.scene.control.Label?>
+<?import javafx.scene.layout.BorderPane?>
+<?import javafx.scene.layout.StackPane?>
+<?import javafx.scene.layout.VBox?>
+
+<BorderPane xmlns="http://javafx.com/javafx"
+            xmlns:fx="http://javafx.com/fxml"
+            fx:controller="com.spendwise.controller.MainController"
+            styleClass="root-pane">
+    <left>
+        <VBox styleClass="sidebar" spacing="4" prefWidth="200">
+            <padding>
+                <Insets top="24" right="12" bottom="12" left="12"/>
+            </padding>
+            <Label text="SpendWise" styleClass="brand-label"/>
+            <Label text="know where it goes" styleClass="brand-subtitle"/>
+            <VBox spacing="2" styleClass="nav-list">
+                <padding>
+                    <Insets top="24"/>
+                </padding>
+                <Button fx:id="navDashboard" text="Dashboard" onAction="#showDashboard" styleClass="nav-button"/>
+                <Button fx:id="navTransactions" text="Transactions" onAction="#showTransactions" styleClass="nav-button"/>
+                <Button fx:id="navBudgets" text="Budgets" onAction="#showBudgets" styleClass="nav-button"/>
+                <Button fx:id="navRecurring" text="Recurring" onAction="#showRecurring" styleClass="nav-button"/>
+                <Button fx:id="navAnalytics" text="Analytics" onAction="#showAnalytics" styleClass="nav-button"/>
+            </VBox>
+        </VBox>
+    </left>
+    <center>
+        <StackPane fx:id="contentArea" styleClass="content-area"/>
+    </center>
+</BorderPane>

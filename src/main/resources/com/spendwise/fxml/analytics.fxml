@@ -1,0 +1,16 @@
+<?xml version="1.0" encoding="UTF-8"?>
+
+<?import javafx.geometry.Insets?>
+<?import javafx.scene.control.Label?>
+<?import javafx.scene.layout.VBox?>
+
+<VBox xmlns="http://javafx.com/javafx"
+      xmlns:fx="http://javafx.com/fxml"
+      fx:controller="com.spendwise.controller.AnalyticsController"
+      spacing="12" styleClass="screen">
+    <padding>
+        <Insets top="24" right="24" bottom="24" left="24"/>
+    </padding>
+    <Label text="Analytics &amp; Insights" styleClass="screen-title"/>
+    <Label text="Charts and spending-harm insights will appear here (Phase 5)." styleClass="placeholder-text"/>
+</VBox>

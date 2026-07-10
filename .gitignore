@@ -1,0 +1,7 @@
+target/
+.idea/
+*.iml
+.vscode/
+*.db
+*.db-journal
+.DS_Store

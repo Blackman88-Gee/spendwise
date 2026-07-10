@@ -1,0 +1,67 @@
+.root-pane {
+    -fx-background-color: #F4F6F8;
+    -fx-font-family: "Segoe UI", sans-serif;
+}
+
+.sidebar {
+    -fx-background-color: #1F2A44;
+}
+
+.brand-label {
+    -fx-text-fill: white;
+    -fx-font-size: 22px;
+    -fx-font-weight: bold;
+}
+
+.brand-subtitle {
+    -fx-text-fill: #9AA5B1;
+    -fx-font-size: 11px;
+}
+
+.nav-button {
+    -fx-background-color: transparent;
+    -fx-text-fill: #C4CCD6;
+    -fx-alignment: center-left;
+    -fx-font-size: 13px;
+    -fx-padding: 10 14 10 14;
+    -fx-pref-width: 176;
+    -fx-cursor: hand;
+    -fx-background-radius: 6;
+}
+
+.nav-button:hover {
+    -fx-background-color: #2C3A5C;
+    -fx-text-fill: white;
+}
+
+.nav-button-active {
+    -fx-background-color: #4A90D9;
+    -fx-text-fill: white;
+    -fx-font-weight: bold;
+}
+
+.content-area {
+    -fx-background-color: #F4F6F8;
+}
+
+.screen {
+    -fx-background-color: #F4F6F8;
+}
+
+.screen-title {
+    -fx-font-size: 24px;
+    -fx-font-weight: bold;
+    -fx-text-fill: #1F2A44;
+}
+
+.placeholder-text {
+    -fx-text-fill: #6B7684;
+    -fx-font-size: 13px;
+}
+
+.card {
+    -fx-background-color: white;
+    -fx-background-radius: 10;
+    -fx-padding: 16;
+    -fx-effect: dropshadow(gaussian, rgba(0,0,0,0.08), 8, 0, 0, 2);
+}

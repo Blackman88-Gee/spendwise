@@ -1,0 +1,16 @@
+<?xml version="1.0" encoding="UTF-8"?>
+
+<?import javafx.geometry.Insets?>
+<?import javafx.scene.control.Label?>
+<?import javafx.scene.layout.VBox?>
+
+<VBox xmlns="http://javafx.com/javafx"
+      xmlns:fx="http://javafx.com/fxml"
+      fx:controller="com.spendwise.controller.DashboardController"
+      spacing="12" styleClass="screen">
+    <padding>
+        <Insets top="24" right="24" bottom="24" left="24"/>
+    </padding>
+    <Label text="Dashboard" styleClass="screen-title"/>
+    <Label text="Balance summary and budget alerts will appear here (Phase 3-4)." styleClass="placeholder-text"/>
+</VBox>

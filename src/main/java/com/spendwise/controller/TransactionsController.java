@@ -12,6 +12,7 @@ import com.spendwise.model.Expense;
 import com.spendwise.model.Transaction;
 import com.spendwise.model.TransactionType;
 import com.spendwise.service.BudgetService;
+import com.spendwise.service.ExportService;
 import javafx.beans.property.SimpleStringProperty;
 import javafx.collections.FXCollections;
 import javafx.fxml.FXML;
@@ -29,6 +30,8 @@ import javafx.scene.control.TableColumn;
 import javafx.scene.control.TableView;
 import javafx.scene.control.TextField;
 import javafx.scene.layout.HBox;
+import javafx.stage.FileChooser;
+import javafx.stage.Window;
 import javafx.util.StringConverter;
 
 import java.io.IOException;
@@ -57,6 +60,9 @@ public class TransactionsController {
     private final TransactionRepository transactionRepository = new SqliteTransactionRepository(categoryRepository);
     private final BudgetService budgetService =
             new BudgetService(new SqliteBudgetRepository(categoryRepository), transactionRepository);
+    private final ExportService exportService = new ExportService();
+
+    private List<Transaction> lastFiltered = List.of();
 
     @FXML
     public void initialize() {
@@ -130,6 +136,7 @@ public class TransactionsController {
 
         table.setItems(FXCollections.observableArrayList(filtered));
         updateSummary(filtered);
+        lastFiltered = filtered;
     }
 
     private void updateSummary(List<Transaction> transactions) {
@@ -150,6 +157,38 @@ public class TransactionsController {
     @FXML
     public void onAddTransaction() {
         openTransactionDialog(null);
+    }
+
+    @FXML
+    public void onExportCsv() {
+        if (lastFiltered.isEmpty()) {
+            Alert alert = new Alert(Alert.AlertType.INFORMATION, "There are no transactions to export for the current filters.");
+            alert.setHeaderText(null);
+            alert.showAndWait();
+            return;
+        }
+
+        FileChooser fileChooser = new FileChooser();
+        fileChooser.setTitle("Export Transactions to CSV");
+        fileChooser.setInitialFileName("spendwise-transactions-" + LocalDate.now() + ".csv");
+        fileChooser.getExtensionFilters().add(new FileChooser.ExtensionFilter("CSV Files", "*.csv"));
+
+        Window window = table.getScene().getWindow();
+        java.io.File file = fileChooser.showSaveDialog(window);
+        if (file == null) {
+            return;
+        }
+
+        try {
+            exportService.exportTransactionsToCsv(lastFiltered, file.toPath());
+            Alert done = new Alert(Alert.AlertType.INFORMATION, "Exported " + lastFiltered.size() + " transactions to " + file.getName());
+            done.setHeaderText(null);
+            done.showAndWait();
+        } catch (IOException e) {
+            Alert error = new Alert(Alert.AlertType.ERROR, "Failed to export CSV: " + e.getMessage());
+            error.setHeaderText("Export Failed");
+            error.showAndWait();
+        }
     }
 
     private void onEditTransaction(Transaction transaction) {

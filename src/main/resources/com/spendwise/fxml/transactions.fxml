@@ -35,6 +35,7 @@
         <DatePicker fx:id="filterEndDate" prefWidth="140"/>
         <TextField fx:id="searchField" promptText="Search description..." prefWidth="180"/>
         <Button text="Reset" onAction="#onResetFilters"/>
+        <Button text="Export CSV" onAction="#onExportCsv"/>
     </HBox>
 
     <TableView fx:id="table" VBox.vgrow="ALWAYS">

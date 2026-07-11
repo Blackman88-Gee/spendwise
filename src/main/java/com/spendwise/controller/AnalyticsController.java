@@ -27,6 +27,7 @@ import java.util.Map;
 public class AnalyticsController {
 
     @FXML private PieChart categoryPieChart;
+    @FXML private Label pieEmptyLabel;
     @FXML private BarChart<String, Number> trendBarChart;
     @FXML private CategoryAxis trendXAxis;
     @FXML private VBox insightsContainer;
@@ -55,6 +56,8 @@ public class AnalyticsController {
             totals.merge(t.getCategory().getName(), t.getAmount(), Double::sum);
         }
 
+        pieEmptyLabel.setVisible(totals.isEmpty());
+        pieEmptyLabel.setManaged(totals.isEmpty());
         if (totals.isEmpty()) {
             categoryPieChart.setData(FXCollections.observableArrayList());
             return;

@@ -4,6 +4,7 @@
 <?import javafx.scene.control.Button?>
 <?import javafx.scene.control.Label?>
 <?import javafx.scene.layout.BorderPane?>
+<?import javafx.scene.layout.HBox?>
 <?import javafx.scene.layout.StackPane?>
 <?import javafx.scene.layout.VBox?>
 
@@ -16,8 +17,15 @@
             <padding>
                 <Insets top="24" right="12" bottom="12" left="12"/>
             </padding>
-            <Label text="SpendWise" styleClass="brand-label"/>
-            <Label text="know where it goes" styleClass="brand-subtitle"/>
+            <HBox spacing="10" alignment="CENTER_LEFT">
+                <StackPane styleClass="brand-mark">
+                    <Label text="S" styleClass="brand-mark-text"/>
+                </StackPane>
+                <VBox spacing="0">
+                    <Label text="SpendWise" styleClass="brand-label"/>
+                    <Label text="know where it goes" styleClass="brand-subtitle"/>
+                </VBox>
+            </HBox>
             <VBox spacing="2" styleClass="nav-list">
                 <padding>
                     <Insets top="24"/>

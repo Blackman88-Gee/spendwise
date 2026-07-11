@@ -31,8 +31,8 @@
         </VBox>
     </HBox>
 
-    <VBox styleClass="card" spacing="8" VBox.vgrow="ALWAYS">
+    <VBox styleClass="card" spacing="8">
         <Label text="Recent Transactions" styleClass="card-section-title"/>
-        <ListView fx:id="recentList" VBox.vgrow="ALWAYS"/>
+        <ListView fx:id="recentList" fixedCellSize="32" styleClass="empty-state-list"/>
     </VBox>
 </VBox>

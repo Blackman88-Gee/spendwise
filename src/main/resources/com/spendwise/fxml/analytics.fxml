@@ -7,6 +7,7 @@
 <?import javafx.scene.chart.PieChart?>
 <?import javafx.scene.control.Label?>
 <?import javafx.scene.layout.HBox?>
+<?import javafx.scene.layout.StackPane?>
 <?import javafx.scene.layout.VBox?>
 
 <VBox xmlns="http://javafx.com/javafx"
@@ -22,7 +23,10 @@
     <HBox spacing="16" VBox.vgrow="ALWAYS">
         <VBox styleClass="card" spacing="6" HBox.hgrow="ALWAYS">
             <Label text="Spending by Category (This Month)" styleClass="card-section-title"/>
-            <PieChart fx:id="categoryPieChart" legendVisible="true" VBox.vgrow="ALWAYS"/>
+            <StackPane VBox.vgrow="ALWAYS">
+                <PieChart fx:id="categoryPieChart" legendVisible="true"/>
+                <Label fx:id="pieEmptyLabel" text="No expenses recorded this month yet." styleClass="placeholder-text"/>
+            </StackPane>
         </VBox>
         <VBox styleClass="card" spacing="6" HBox.hgrow="ALWAYS">
             <Label text="Income vs Expense (Last 6 Months)" styleClass="card-section-title"/>

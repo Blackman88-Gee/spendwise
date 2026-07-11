@@ -1,61 +1,77 @@
 .root-pane {
-    -fx-background-color: #F4F6F8;
-    -fx-font-family: "Segoe UI", sans-serif;
+    -fx-background-color: #F1F3F4;
+    -fx-font-family: "Segoe UI Semibold", "Segoe UI", sans-serif;
 }
 
 .sidebar {
-    -fx-background-color: #1F2A44;
+    -fx-background-color: #14181F;
+}
+
+.brand-mark {
+    -fx-background-color: linear-gradient(to bottom right, #14B8A6, #0F766E);
+    -fx-background-radius: 8;
+    -fx-min-width: 34;
+    -fx-min-height: 34;
+    -fx-max-width: 34;
+    -fx-max-height: 34;
+}
+
+.brand-mark-text {
+    -fx-text-fill: white;
+    -fx-font-size: 16px;
+    -fx-font-weight: bold;
 }
 
 .brand-label {
     -fx-text-fill: white;
-    -fx-font-size: 22px;
+    -fx-font-size: 20px;
     -fx-font-weight: bold;
+    -fx-letter-spacing: 0.3px;
 }
 
 .brand-subtitle {
-    -fx-text-fill: #9AA5B1;
-    -fx-font-size: 11px;
+    -fx-text-fill: #6B7280;
+    -fx-font-size: 10.5px;
 }
 
 .nav-button {
     -fx-background-color: transparent;
-    -fx-text-fill: #C4CCD6;
+    -fx-text-fill: #9CA3AF;
     -fx-alignment: center-left;
     -fx-font-size: 13px;
     -fx-padding: 10 14 10 14;
     -fx-pref-width: 176;
     -fx-cursor: hand;
-    -fx-background-radius: 6;
+    -fx-background-radius: 7;
 }
 
 .nav-button:hover {
-    -fx-background-color: #2C3A5C;
-    -fx-text-fill: white;
+    -fx-background-color: #1F242E;
+    -fx-text-fill: #E5E7EB;
 }
 
 .nav-button-active {
-    -fx-background-color: #4A90D9;
+    -fx-background-color: #0F766E;
     -fx-text-fill: white;
     -fx-font-weight: bold;
 }
 
 .content-area {
-    -fx-background-color: #F4F6F8;
+    -fx-background-color: #F1F3F4;
 }
 
 .screen {
-    -fx-background-color: #F4F6F8;
+    -fx-background-color: #F1F3F4;
 }
 
 .screen-title {
-    -fx-font-size: 24px;
+    -fx-font-size: 23px;
     -fx-font-weight: bold;
-    -fx-text-fill: #1F2A44;
+    -fx-text-fill: #14181F;
 }
 
 .placeholder-text {
-    -fx-text-fill: #6B7684;
+    -fx-text-fill: #6B7280;
     -fx-font-size: 13px;
 }
 
@@ -63,40 +79,41 @@
     -fx-background-color: white;
     -fx-background-radius: 10;
     -fx-padding: 16;
-    -fx-effect: dropshadow(gaussian, rgba(0,0,0,0.08), 8, 0, 0, 2);
+    -fx-effect: dropshadow(gaussian, rgba(20,24,31,0.10), 10, 0, 0, 3);
 }
 
 .card-label {
-    -fx-text-fill: #6B7684;
+    -fx-text-fill: #6B7280;
     -fx-font-size: 12px;
+    -fx-font-weight: bold;
 }
 
 .card-value {
-    -fx-text-fill: #1F2A44;
+    -fx-text-fill: #14181F;
     -fx-font-size: 26px;
     -fx-font-weight: bold;
 }
 
 .card-value-income {
-    -fx-text-fill: #2E7D32;
+    -fx-text-fill: #0F766E;
     -fx-font-size: 22px;
     -fx-font-weight: bold;
 }
 
 .card-value-expense {
-    -fx-text-fill: #C62828;
+    -fx-text-fill: #BE123C;
     -fx-font-size: 22px;
     -fx-font-weight: bold;
 }
 
 .card-section-title {
-    -fx-text-fill: #1F2A44;
+    -fx-text-fill: #14181F;
     -fx-font-size: 15px;
     -fx-font-weight: bold;
 }
 
 .primary-button {
-    -fx-background-color: #4A90D9;
+    -fx-background-color: #0F766E;
     -fx-text-fill: white;
     -fx-font-weight: bold;
     -fx-padding: 8 16 8 16;
@@ -105,16 +122,33 @@
 }
 
 .primary-button:hover {
-    -fx-background-color: #3A7BC0;
+    -fx-background-color: #0B5C56;
+}
+
+.secondary-button {
+    -fx-background-color: #EDEFF1;
+    -fx-text-fill: #14181F;
+    -fx-padding: 8 16 8 16;
+    -fx-background-radius: 6;
+    -fx-cursor: hand;
+}
+
+.secondary-button:hover {
+    -fx-background-color: #E1E4E7;
 }
 
 .form-error {
-    -fx-text-fill: #C62828;
+    -fx-text-fill: #BE123C;
     -fx-font-size: 12px;
 }
 
+.form-warning {
+    -fx-text-fill: #B45309;
+    -fx-font-size: 11px;
+}
+
 .insight-info {
-    -fx-text-fill: #1F2A44;
+    -fx-text-fill: #14181F;
     -fx-background-color: #EEF2F7;
     -fx-padding: 8;
     -fx-background-radius: 6;
@@ -134,3 +168,77 @@
     -fx-background-radius: 6;
     -fx-font-weight: bold;
 }
+
+.empty-state-list {
+    -fx-background-color: transparent;
+    -fx-background-insets: 0;
+}
+
+.empty-state-list .list-cell:empty {
+    -fx-background-color: transparent;
+    -fx-border-width: 0;
+}
+
+/* ---- Chart theming: replaces JavaFX's default orange/yellow Modena palette ---- */
+
+.chart {
+    -fx-padding: 6;
+}
+
+.chart-plot-background {
+    -fx-background-color: transparent;
+}
+
+.chart-vertical-grid-lines, .chart-horizontal-grid-lines {
+    -fx-stroke: #E5E7EB;
+}
+
+.axis {
+    -fx-tick-label-fill: #6B7280;
+    -fx-font-size: 11px;
+}
+
+.axis-label {
+    -fx-text-fill: #6B7280;
+}
+
+.chart-legend {
+    -fx-background-color: transparent;
+    -fx-font-size: 11.5px;
+    -fx-text-fill: #14181F;
+}
+
+.chart-pie-label {
+    -fx-fill: #14181F;
+    -fx-font-size: 11px;
+}
+
+.default-color0.chart-bar, .default-color0.chart-pie, .default-color0.chart-line-symbol,
+.default-color0.chart-legend-item-symbol { -fx-bar-fill: #0F766E; -fx-pie-color: #0F766E; -fx-background-color: #0F766E; }
+
+.default-color1.chart-bar, .default-color1.chart-pie, .default-color1.chart-line-symbol,
+.default-color1.chart-legend-item-symbol { -fx-bar-fill: #DB2777; -fx-pie-color: #DB2777; -fx-background-color: #DB2777; }
+
+.default-color2.chart-bar, .default-color2.chart-pie, .default-color2.chart-line-symbol,
+.default-color2.chart-legend-item-symbol { -fx-bar-fill: #D97706; -fx-pie-color: #D97706; -fx-background-color: #D97706; }
+
+.default-color3.chart-bar, .default-color3.chart-pie, .default-color3.chart-line-symbol,
+.default-color3.chart-legend-item-symbol { -fx-bar-fill: #4F46E5; -fx-pie-color: #4F46E5; -fx-background-color: #4F46E5; }
+
+.default-color4.chart-bar, .default-color4.chart-pie, .default-color4.chart-line-symbol,
+.default-color4.chart-legend-item-symbol { -fx-bar-fill: #0284C7; -fx-pie-color: #0284C7; -fx-background-color: #0284C7; }
+
+.default-color5.chart-bar, .default-color5.chart-pie, .default-color5.chart-line-symbol,
+.default-color5.chart-legend-item-symbol { -fx-bar-fill: #65A30D; -fx-pie-color: #65A30D; -fx-background-color: #65A30D; }
+
+.default-color6.chart-bar, .default-color6.chart-pie, .default-color6.chart-line-symbol,
+.default-color6.chart-legend-item-symbol { -fx-bar-fill: #9333EA; -fx-pie-color: #9333EA; -fx-background-color: #9333EA; }
+
+.default-color7.chart-bar, .default-color7.chart-pie, .default-color7.chart-line-symbol,
+.default-color7.chart-legend-item-symbol { -fx-bar-fill: #E11D48; -fx-pie-color: #E11D48; -fx-background-color: #E11D48; }
+
+.default-color8.chart-bar, .default-color8.chart-pie, .default-color8.chart-line-symbol,
+.default-color8.chart-legend-item-symbol { -fx-bar-fill: #0891B2; -fx-pie-color: #0891B2; -fx-background-color: #0891B2; }
+
+.default-color9.chart-bar, .default-color9.chart-pie, .default-color9.chart-line-symbol,
+.default-color9.chart-legend-item-symbol { -fx-bar-fill: #78716C; -fx-pie-color: #78716C; -fx-background-color: #78716C; }

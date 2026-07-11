@@ -51,6 +51,7 @@ public class DashboardController {
                         t.getDate(), t.getDescription(), t.getType() == TransactionType.EXPENSE ? "-" : "+",
                         t.getAmount(), t.getCategory().getName()))
                 .toList();
-        recentList.setItems(FXCollections.observableArrayList(recent));
+        recentList.setItems(FXCollections.observableArrayList(
+                recent.isEmpty() ? List.of("No transactions yet — add one from the Transactions tab.") : recent));
     }
 }

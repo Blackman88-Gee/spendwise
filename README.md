@@ -66,7 +66,15 @@ mvn test
 
 ## Screenshots
 
-_See the `screenshots/` folder._
+| Dashboard | Transactions |
+|---|---|
+| ![Dashboard](screenshots/Screenshot%202026-07-11%20014649.png) | ![Transactions](screenshots/Screenshot%202026-07-11%20014929.png) |
+
+| Budgets | Recurring |
+|---|---|
+| ![Budgets](screenshots/Screenshot%202026-07-11%20014948.png) | ![Recurring](screenshots/Screenshot%202026-07-11%20015001.png) |
+
+![Analytics & Insights](screenshots/Screenshot%202026-07-11%20015015.png)
 
 ## Author
 

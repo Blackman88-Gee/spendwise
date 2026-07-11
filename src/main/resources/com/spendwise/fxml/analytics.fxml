@@ -1,16 +1,41 @@
 <?xml version="1.0" encoding="UTF-8"?>
 
 <?import javafx.geometry.Insets?>
+<?import javafx.scene.chart.BarChart?>
+<?import javafx.scene.chart.CategoryAxis?>
+<?import javafx.scene.chart.NumberAxis?>
+<?import javafx.scene.chart.PieChart?>
 <?import javafx.scene.control.Label?>
+<?import javafx.scene.layout.HBox?>
 <?import javafx.scene.layout.VBox?>
 
 <VBox xmlns="http://javafx.com/javafx"
       xmlns:fx="http://javafx.com/fxml"
       fx:controller="com.spendwise.controller.AnalyticsController"
-      spacing="12" styleClass="screen">
+      spacing="14" styleClass="screen">
     <padding>
         <Insets top="24" right="24" bottom="24" left="24"/>
     </padding>
+
     <Label text="Analytics &amp; Insights" styleClass="screen-title"/>
-    <Label text="Charts and spending-harm insights will appear here (Phase 5)." styleClass="placeholder-text"/>
+
+    <HBox spacing="16" VBox.vgrow="ALWAYS">
+        <VBox styleClass="card" spacing="6" HBox.hgrow="ALWAYS">
+            <Label text="Spending by Category (This Month)" styleClass="card-section-title"/>
+            <PieChart fx:id="categoryPieChart" legendVisible="true" VBox.vgrow="ALWAYS"/>
+        </VBox>
+        <VBox styleClass="card" spacing="6" HBox.hgrow="ALWAYS">
+            <Label text="Income vs Expense (Last 6 Months)" styleClass="card-section-title"/>
+            <BarChart fx:id="trendBarChart" VBox.vgrow="ALWAYS">
+                <xAxis>
+                    <CategoryAxis fx:id="trendXAxis"/>
+                </xAxis>
+                <yAxis>
+                    <NumberAxis fx:id="trendYAxis"/>
+                </yAxis>
+            </BarChart>
+        </VBox>
+    </HBox>
+
+    <VBox fx:id="insightsContainer" styleClass="card" spacing="8"/>
 </VBox>

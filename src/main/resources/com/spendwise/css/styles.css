@@ -112,3 +112,25 @@
     -fx-text-fill: #C62828;
     -fx-font-size: 12px;
 }
+
+.insight-info {
+    -fx-text-fill: #1F2A44;
+    -fx-background-color: #EEF2F7;
+    -fx-padding: 8;
+    -fx-background-radius: 6;
+}
+
+.insight-warning {
+    -fx-text-fill: #7A4A00;
+    -fx-background-color: #FFF3E0;
+    -fx-padding: 8;
+    -fx-background-radius: 6;
+}
+
+.insight-critical {
+    -fx-text-fill: #8E0000;
+    -fx-background-color: #FDECEA;
+    -fx-padding: 8;
+    -fx-background-radius: 6;
+    -fx-font-weight: bold;
+}

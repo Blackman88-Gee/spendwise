@@ -94,6 +94,12 @@
     -fx-font-weight: bold;
 }
 
+.card-value-secondary {
+    -fx-text-fill: #6B7280;
+    -fx-font-size: 18px;
+    -fx-font-weight: bold;
+}
+
 .card-value-income {
     -fx-text-fill: #0F766E;
     -fx-font-size: 22px;

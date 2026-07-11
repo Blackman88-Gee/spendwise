@@ -1,6 +1,7 @@
 package com.spendwise.service;
 
 import com.spendwise.model.Category;
+import com.spendwise.model.Currency;
 import com.spendwise.model.TransactionType;
 
 import java.time.LocalDate;
@@ -25,6 +26,7 @@ public class ImportService {
     private static final Pattern NUMBER_PATTERN = Pattern.compile("(\\d+(?:\\.\\d{1,2})?)");
     private static final Pattern PARENTHETICAL = Pattern.compile("\\(([^)]*)\\)");
     private static final Pattern CURRENCY_TOKEN = Pattern.compile("(?i)ghs|gh₵|ghc|usd|₵|\\$");
+    private static final Pattern USD_MARKER = Pattern.compile("(?i)usd|\\$");
     private static final Pattern LEADING_SEPARATOR = Pattern.compile("^[\\s\\-:,]+");
     private static final Pattern TRIM_SEPARATORS = Pattern.compile("^[\\s\\-:,.=]+|[\\s\\-:,.=]+$");
 
@@ -112,6 +114,7 @@ public class ImportService {
 
         double amount = 0;
         boolean amountFound = false;
+        Currency currency = Currency.GHS;
         String description;
 
         int equalsIndex = line.indexOf('=');
@@ -122,6 +125,7 @@ public class ImportService {
             String amountSegment = secondEquals >= 0 ? rest.substring(0, secondEquals) : rest;
             String extra = secondEquals >= 0 ? rest.substring(secondEquals + 1).strip() : null;
 
+            currency = detectCurrency(amountSegment);
             Double parsedAmount = extractAmount(amountSegment);
             if (parsedAmount != null) {
                 amount = parsedAmount;
@@ -133,6 +137,7 @@ public class ImportService {
                 warning = appendWarning(warning, "extra value in line not used as amount: " + extra);
             }
         } else {
+            currency = detectCurrency(line);
             Matcher matcher = NUMBER_PATTERN.matcher(line);
             int lastStart = -1;
             int lastEnd = -1;
@@ -167,7 +172,12 @@ public class ImportService {
         Category category = guessCategory(lowerDescription, type, availableCategories)
                 .orElse(type == TransactionType.INCOME ? fallbackIncome : fallbackExpense);
 
-        return new ParsedExpense(date, type, description, amount, category, amountFound, warning);
+        return new ParsedExpense(date, type, description, amount, currency, category, amountFound, warning);
+    }
+
+    /** Defaults to GHS (the primary currency) unless the text explicitly marks an amount as USD/$. */
+    private Currency detectCurrency(String text) {
+        return USD_MARKER.matcher(text).find() ? Currency.USD : Currency.GHS;
     }
 
     private Double extractAmount(String text) {

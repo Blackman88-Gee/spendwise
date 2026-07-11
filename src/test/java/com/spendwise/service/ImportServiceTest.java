@@ -2,6 +2,7 @@ package com.spendwise.service;
 
 import com.spendwise.exception.ValidationException;
 import com.spendwise.model.Category;
+import com.spendwise.model.Currency;
 import com.spendwise.model.TransactionType;
 import org.junit.jupiter.api.BeforeEach;
 import org.junit.jupiter.api.Test;
@@ -178,5 +179,42 @@ class ImportServiceTest {
 
         assertEquals("Transport", rows.get(0).category().getName());
         assertEquals(15.0, rows.get(0).amount(), 0.001);
+    }
+
+    @Test
+    void defaultsToGhsWhenNoCurrencyMarkerPresent() {
+        String note = """
+                July 10
+                Uber - 15.00
+                """;
+
+        List<ParsedExpense> rows = importService.parseNote(note, categories);
+
+        assertEquals(Currency.GHS, rows.get(0).currency());
+    }
+
+    @Test
+    void detectsUsdFromDollarSign() {
+        String note = """
+                July 10
+                Domain renewal = $12
+                """;
+
+        List<ParsedExpense> rows = importService.parseNote(note, categories);
+
+        assertEquals(Currency.USD, rows.get(0).currency());
+        assertEquals(12.0, rows.get(0).amount(), 0.001);
+    }
+
+    @Test
+    void parentheticalCurrencyMentionDoesNotAffectMainAmountCurrency() {
+        String note = """
+                25th June - Cash in = Ghs 1,200 ( $100 taken from Petty cash USD)
+                """;
+
+        List<ParsedExpense> rows = importService.parseNote(note, categories);
+
+        assertEquals(Currency.GHS, rows.get(0).currency());
+        assertEquals(1200.0, rows.get(0).amount(), 0.001);
     }
 }

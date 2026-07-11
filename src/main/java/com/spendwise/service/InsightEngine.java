@@ -1,6 +1,7 @@
 package com.spendwise.service;
 
 import com.spendwise.dao.TransactionRepository;
+import com.spendwise.model.Currency;
 import com.spendwise.model.Insight;
 import com.spendwise.model.Transaction;
 import com.spendwise.model.TransactionType;
@@ -30,11 +31,14 @@ public class InsightEngine {
         this.transactionRepository = transactionRepository;
     }
 
+    /** Insights track GHS spending only, since that's the currency budgets are set in. */
     public List<Insight> generateInsights(YearMonth month) {
-        List<Transaction> current = transactionRepository.findByDateRange(month.atDay(1), month.atEndOfMonth());
+        List<Transaction> current = transactionRepository.findByDateRange(month.atDay(1), month.atEndOfMonth())
+                .stream().filter(t -> t.getCurrency() == Currency.GHS).toList();
         YearMonth previousMonth = month.minusMonths(1);
         List<Transaction> previous = transactionRepository.findByDateRange(
-                previousMonth.atDay(1), previousMonth.atEndOfMonth());
+                previousMonth.atDay(1), previousMonth.atEndOfMonth())
+                .stream().filter(t -> t.getCurrency() == Currency.GHS).toList();
 
         double totalIncome = sum(current, TransactionType.INCOME);
         double totalExpense = sum(current, TransactionType.EXPENSE);
@@ -59,7 +63,7 @@ public class InsightEngine {
         if (income > 0 && expense > income) {
             double deficit = expense - income;
             insights.add(new Insight(Insight.Severity.CRITICAL, String.format(
-                    "You spent $%.2f more than you earned this month. Keeping this up erodes your savings by roughly $%.2f every month.",
+                    "You spent GH₵%.2f more than you earned this month. Keeping this up erodes your savings by roughly GH₵%.2f every month.",
                     deficit, deficit)));
         }
     }
@@ -76,7 +80,7 @@ public class InsightEngine {
         double ratio = discretionary / income;
         if (ratio >= DISCRETIONARY_ALERT_THRESHOLD) {
             insights.add(new Insight(Insight.Severity.WARNING, String.format(
-                    "%.0f%% of your income this month went to dining, entertainment, and shopping — that's $%.2f that could have gone to savings.",
+                    "%.0f%% of your income this month went to dining, entertainment, and shopping — that's GH₵%.2f that could have gone to savings.",
                     ratio * 100, discretionary)));
         }
     }
@@ -93,7 +97,7 @@ public class InsightEngine {
             double increasePct = (entry.getValue() - prevAmount) / prevAmount;
             if (increasePct >= CATEGORY_INCREASE_ALERT_THRESHOLD) {
                 insights.add(new Insight(Insight.Severity.WARNING, String.format(
-                        "Your spending on %s is up %.0f%% from last month ($%.2f vs $%.2f).",
+                        "Your spending on %s is up %.0f%% from last month (GH₵%.2f vs GH₵%.2f).",
                         entry.getKey(), increasePct * 100, entry.getValue(), prevAmount)));
             }
         }
@@ -128,7 +132,7 @@ public class InsightEngine {
             double projectedAnnual = monthTotal * 12;
             if (projectedAnnual >= PROJECTED_ANNUAL_ALERT_FLOOR) {
                 insights.add(new Insight(Insight.Severity.INFO, String.format(
-                        "You made %d %s purchases this month totaling $%.2f. At that pace, that's about $%.2f a year.",
+                        "You made %d %s purchases this month totaling GH₵%.2f. At that pace, that's about GH₵%.2f a year.",
                         txs.size(), entry.getKey(), monthTotal, projectedAnnual)));
             }
         }

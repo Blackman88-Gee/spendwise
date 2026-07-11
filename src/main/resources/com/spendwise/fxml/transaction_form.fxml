@@ -30,11 +30,14 @@
         <Label text="Amount" GridPane.rowIndex="2" GridPane.columnIndex="0"/>
         <TextField fx:id="amountField" GridPane.rowIndex="2" GridPane.columnIndex="1" promptText="0.00"/>
 
-        <Label text="Description" GridPane.rowIndex="3" GridPane.columnIndex="0"/>
-        <TextField fx:id="descriptionField" GridPane.rowIndex="3" GridPane.columnIndex="1" promptText="e.g. Weekly groceries"/>
+        <Label text="Currency" GridPane.rowIndex="3" GridPane.columnIndex="0"/>
+        <ComboBox fx:id="currencyCombo" GridPane.rowIndex="3" GridPane.columnIndex="1" maxWidth="Infinity"/>
 
-        <Label text="Date" GridPane.rowIndex="4" GridPane.columnIndex="0"/>
-        <DatePicker fx:id="dateField" GridPane.rowIndex="4" GridPane.columnIndex="1" maxWidth="Infinity"/>
+        <Label text="Description" GridPane.rowIndex="4" GridPane.columnIndex="0"/>
+        <TextField fx:id="descriptionField" GridPane.rowIndex="4" GridPane.columnIndex="1" promptText="e.g. Weekly groceries"/>
+
+        <Label text="Date" GridPane.rowIndex="5" GridPane.columnIndex="0"/>
+        <DatePicker fx:id="dateField" GridPane.rowIndex="5" GridPane.columnIndex="1" maxWidth="Infinity"/>
     </GridPane>
     <Label fx:id="errorLabel" styleClass="form-error" wrapText="true"/>
 </VBox>

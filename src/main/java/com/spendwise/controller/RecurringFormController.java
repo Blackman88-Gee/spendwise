@@ -2,6 +2,7 @@ package com.spendwise.controller;
 
 import com.spendwise.exception.ValidationException;
 import com.spendwise.model.Category;
+import com.spendwise.model.Currency;
 import com.spendwise.model.Frequency;
 import com.spendwise.model.RecurringRule;
 import com.spendwise.model.TransactionType;
@@ -22,6 +23,7 @@ public class RecurringFormController {
     @FXML private ComboBox<TransactionType> typeCombo;
     @FXML private ComboBox<Category> categoryCombo;
     @FXML private TextField amountField;
+    @FXML private ComboBox<Currency> currencyCombo;
     @FXML private TextField descriptionField;
     @FXML private ComboBox<Frequency> frequencyCombo;
     @FXML private DatePicker nextDueDateField;
@@ -51,6 +53,20 @@ public class RecurringFormController {
         frequencyCombo.setItems(FXCollections.observableArrayList(Frequency.values()));
         frequencyCombo.setValue(Frequency.MONTHLY);
 
+        currencyCombo.setItems(FXCollections.observableArrayList(Currency.GHS, Currency.USD));
+        currencyCombo.setConverter(new StringConverter<>() {
+            @Override
+            public String toString(Currency currency) {
+                return currency == null ? "" : currency.name() + " (" + currency.getSymbol() + ")";
+            }
+
+            @Override
+            public Currency fromString(String string) {
+                return Currency.valueOf(string.split(" ")[0]);
+            }
+        });
+        currencyCombo.setValue(Currency.GHS);
+
         nextDueDateField.setValue(LocalDate.now());
     }
 
@@ -75,6 +91,7 @@ public class RecurringFormController {
         refreshCategoryOptions();
         categoryCombo.setValue(rule.getCategory());
         amountField.setText(String.valueOf(rule.getAmount()));
+        currencyCombo.setValue(rule.getCurrency());
         descriptionField.setText(rule.getDescription());
         frequencyCombo.setValue(rule.getFrequency());
         nextDueDateField.setValue(rule.getNextDueDate());
@@ -100,8 +117,9 @@ public class RecurringFormController {
         Frequency frequency = frequencyCombo.getValue();
         LocalDate nextDueDate = nextDueDateField.getValue();
         boolean active = activeCheckbox.isSelected();
+        Currency currency = currencyCombo.getValue();
 
-        return new RecurringRule(editingId, type, amount, description, category, frequency, nextDueDate, active);
+        return new RecurringRule(editingId, type, amount, currency, description, category, frequency, nextDueDate, active);
     }
 
     public void showError(String message) {

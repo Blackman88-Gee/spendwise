@@ -8,16 +8,18 @@ public abstract class Transaction {
 
     private final int id;
     private double amount;
+    private Currency currency;
     private String description;
     private Category category;
     private LocalDate date;
     private final Integer recurringRuleId;
 
-    protected Transaction(int id, double amount, String description, Category category,
+    protected Transaction(int id, double amount, Currency currency, String description, Category category,
                           LocalDate date, Integer recurringRuleId) throws ValidationException {
         validate(amount, description, category, date);
         this.id = id;
         this.amount = amount;
+        this.currency = currency == null ? Currency.GHS : currency;
         this.description = description.trim();
         this.category = category;
         this.date = date;
@@ -61,6 +63,14 @@ public abstract class Transaction {
             throw new ValidationException("Amount must be greater than zero");
         }
         this.amount = amount;
+    }
+
+    public Currency getCurrency() {
+        return currency;
+    }
+
+    public void setCurrency(Currency currency) {
+        this.currency = currency == null ? Currency.GHS : currency;
     }
 
     public String getDescription() {

@@ -31,17 +31,20 @@
         <Label text="Amount" GridPane.rowIndex="2" GridPane.columnIndex="0"/>
         <TextField fx:id="amountField" GridPane.rowIndex="2" GridPane.columnIndex="1" promptText="0.00"/>
 
-        <Label text="Description" GridPane.rowIndex="3" GridPane.columnIndex="0"/>
-        <TextField fx:id="descriptionField" GridPane.rowIndex="3" GridPane.columnIndex="1" promptText="e.g. Netflix subscription"/>
+        <Label text="Currency" GridPane.rowIndex="3" GridPane.columnIndex="0"/>
+        <ComboBox fx:id="currencyCombo" GridPane.rowIndex="3" GridPane.columnIndex="1" maxWidth="Infinity"/>
 
-        <Label text="Frequency" GridPane.rowIndex="4" GridPane.columnIndex="0"/>
-        <ComboBox fx:id="frequencyCombo" GridPane.rowIndex="4" GridPane.columnIndex="1" maxWidth="Infinity"/>
+        <Label text="Description" GridPane.rowIndex="4" GridPane.columnIndex="0"/>
+        <TextField fx:id="descriptionField" GridPane.rowIndex="4" GridPane.columnIndex="1" promptText="e.g. Netflix subscription"/>
 
-        <Label text="Next Due Date" GridPane.rowIndex="5" GridPane.columnIndex="0"/>
-        <DatePicker fx:id="nextDueDateField" GridPane.rowIndex="5" GridPane.columnIndex="1" maxWidth="Infinity"/>
+        <Label text="Frequency" GridPane.rowIndex="5" GridPane.columnIndex="0"/>
+        <ComboBox fx:id="frequencyCombo" GridPane.rowIndex="5" GridPane.columnIndex="1" maxWidth="Infinity"/>
 
-        <Label text="Active" GridPane.rowIndex="6" GridPane.columnIndex="0"/>
-        <CheckBox fx:id="activeCheckbox" GridPane.rowIndex="6" GridPane.columnIndex="1" selected="true"/>
+        <Label text="Next Due Date" GridPane.rowIndex="6" GridPane.columnIndex="0"/>
+        <DatePicker fx:id="nextDueDateField" GridPane.rowIndex="6" GridPane.columnIndex="1" maxWidth="Infinity"/>
+
+        <Label text="Active" GridPane.rowIndex="7" GridPane.columnIndex="0"/>
+        <CheckBox fx:id="activeCheckbox" GridPane.rowIndex="7" GridPane.columnIndex="1" selected="true"/>
     </GridPane>
     <Label fx:id="errorLabel" styleClass="form-error" wrapText="true"/>
 </VBox>

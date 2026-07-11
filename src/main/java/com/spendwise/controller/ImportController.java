@@ -8,6 +8,7 @@ import com.spendwise.dao.TransactionRepository;
 import com.spendwise.exception.BudgetExceededException;
 import com.spendwise.exception.ValidationException;
 import com.spendwise.model.Category;
+import com.spendwise.model.Currency;
 import com.spendwise.model.Expense;
 import com.spendwise.model.Income;
 import com.spendwise.model.Transaction;
@@ -45,6 +46,7 @@ public class ImportController {
     @FXML private TableColumn<ImportRow, Category> categoryColumn;
     @FXML private TableColumn<ImportRow, String> descriptionColumn;
     @FXML private TableColumn<ImportRow, Double> amountColumn;
+    @FXML private TableColumn<ImportRow, Currency> currencyColumn;
     @FXML private TableColumn<ImportRow, String> warningColumn;
 
     private final CategoryRepository categoryRepository = new SqliteCategoryRepository();
@@ -124,6 +126,20 @@ public class ImportController {
         amountColumn.setCellFactory(TextFieldTableCell.forTableColumn(new DoubleStringConverter()));
         amountColumn.setOnEditCommit(event -> event.getRowValue().amountProperty().set(event.getNewValue()));
 
+        currencyColumn.setCellValueFactory(data -> data.getValue().currencyProperty());
+        currencyColumn.setCellFactory(ComboBoxTableCell.forTableColumn(new StringConverter<>() {
+            @Override
+            public String toString(Currency currency) {
+                return currency == null ? "" : currency.name();
+            }
+
+            @Override
+            public Currency fromString(String string) {
+                return Currency.valueOf(string);
+            }
+        }, FXCollections.observableArrayList(Currency.GHS, Currency.USD)));
+        currencyColumn.setOnEditCommit(event -> event.getRowValue().currencyProperty().set(event.getNewValue()));
+
         warningColumn.setCellValueFactory(data -> data.getValue().warningProperty());
         warningColumn.setCellFactory(col -> new TableCell<>() {
             @Override
@@ -172,9 +188,9 @@ public class ImportController {
         for (ImportRow row : selected) {
             try {
                 Transaction transaction = row.typeProperty().get() == TransactionType.INCOME
-                        ? new Income(0, row.amountProperty().get(), row.descriptionProperty().get(),
+                        ? new Income(0, row.amountProperty().get(), row.currencyProperty().get(), row.descriptionProperty().get(),
                                 row.categoryProperty().get(), row.dateProperty().get(), null)
-                        : new Expense(0, row.amountProperty().get(), row.descriptionProperty().get(),
+                        : new Expense(0, row.amountProperty().get(), row.currencyProperty().get(), row.descriptionProperty().get(),
                                 row.categoryProperty().get(), row.dateProperty().get(), null);
 
                 if (transaction instanceof Expense expense) {

@@ -19,6 +19,7 @@
     </padding>
 
     <Label text="Analytics &amp; Insights" styleClass="screen-title"/>
+    <Label fx:id="currencyNoteLabel" styleClass="placeholder-text"/>
 
     <HBox spacing="16" VBox.vgrow="ALWAYS">
         <VBox styleClass="card" spacing="6" HBox.hgrow="ALWAYS">

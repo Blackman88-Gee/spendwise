@@ -53,7 +53,8 @@ public class RecurringController {
                 new SimpleStringProperty(data.getValue().getType() == TransactionType.INCOME ? "Income" : "Expense"));
         categoryColumn.setCellValueFactory(data -> new SimpleStringProperty(data.getValue().getCategory().getName()));
         descriptionColumn.setCellValueFactory(data -> new SimpleStringProperty(data.getValue().getDescription()));
-        amountColumn.setCellValueFactory(data -> new SimpleStringProperty(String.format("$%.2f", data.getValue().getAmount())));
+        amountColumn.setCellValueFactory(data -> new SimpleStringProperty(
+                data.getValue().getCurrency().format(data.getValue().getAmount())));
         frequencyColumn.setCellValueFactory(data -> new SimpleStringProperty(data.getValue().getFrequency().name()));
         nextDueColumn.setCellValueFactory(data -> new SimpleStringProperty(data.getValue().getNextDueDate().toString()));
 

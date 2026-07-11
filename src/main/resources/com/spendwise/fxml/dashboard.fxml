@@ -3,7 +3,7 @@
 <?import javafx.geometry.Insets?>
 <?import javafx.scene.control.Label?>
 <?import javafx.scene.control.ListView?>
-<?import javafx.scene.layout.HBox?>
+<?import javafx.scene.layout.FlowPane?>
 <?import javafx.scene.layout.VBox?>
 
 <VBox xmlns="http://javafx.com/javafx"
@@ -16,20 +16,7 @@
 
     <Label text="Dashboard" styleClass="screen-title"/>
 
-    <HBox spacing="16">
-        <VBox styleClass="card" spacing="6" HBox.hgrow="ALWAYS">
-            <Label text="Total Balance" styleClass="card-label"/>
-            <Label fx:id="balanceLabel" styleClass="card-value"/>
-        </VBox>
-        <VBox styleClass="card" spacing="6" HBox.hgrow="ALWAYS">
-            <Label text="This Month — Income" styleClass="card-label"/>
-            <Label fx:id="monthIncomeLabel" styleClass="card-value-income"/>
-        </VBox>
-        <VBox styleClass="card" spacing="6" HBox.hgrow="ALWAYS">
-            <Label text="This Month — Expenses" styleClass="card-label"/>
-            <Label fx:id="monthExpenseLabel" styleClass="card-value-expense"/>
-        </VBox>
-    </HBox>
+    <FlowPane fx:id="summaryCardsContainer" hgap="16" vgap="16"/>
 
     <VBox styleClass="card" spacing="8">
         <Label text="Recent Transactions" styleClass="card-section-title"/>

@@ -42,6 +42,7 @@ public final class DatabaseManager {
                     id INTEGER PRIMARY KEY AUTOINCREMENT,
                     type TEXT NOT NULL CHECK (type IN ('INCOME', 'EXPENSE')),
                     amount REAL NOT NULL CHECK (amount > 0),
+                    currency TEXT NOT NULL DEFAULT 'GHS' CHECK (currency IN ('GHS', 'USD')),
                     description TEXT NOT NULL,
                     category_id INTEGER NOT NULL,
                     transaction_date TEXT NOT NULL,
@@ -64,6 +65,7 @@ public final class DatabaseManager {
                     id INTEGER PRIMARY KEY AUTOINCREMENT,
                     type TEXT NOT NULL CHECK (type IN ('INCOME', 'EXPENSE')),
                     amount REAL NOT NULL CHECK (amount > 0),
+                    currency TEXT NOT NULL DEFAULT 'GHS' CHECK (currency IN ('GHS', 'USD')),
                     description TEXT NOT NULL,
                     category_id INTEGER NOT NULL,
                     frequency TEXT NOT NULL CHECK (frequency IN ('DAILY', 'WEEKLY', 'MONTHLY')),
@@ -77,9 +79,26 @@ public final class DatabaseManager {
             stmt.execute(transactions);
             stmt.execute(budgets);
             stmt.execute(recurringRules);
+            migrateAddCurrencyColumn(conn, "transactions");
+            migrateAddCurrencyColumn(conn, "recurring_rules");
             seedDefaultCategories(conn);
         } catch (SQLException e) {
             throw new DataAccessException("Failed to initialize database schema", e);
+        }
+    }
+
+    /** Existing installs created before multi-currency support won't have this column yet. */
+    private static void migrateAddCurrencyColumn(Connection conn, String table) throws SQLException {
+        try (Statement stmt = conn.createStatement();
+             var rs = stmt.executeQuery("PRAGMA table_info(" + table + ")")) {
+            while (rs.next()) {
+                if ("currency".equalsIgnoreCase(rs.getString("name"))) {
+                    return;
+                }
+            }
+        }
+        try (Statement stmt = conn.createStatement()) {
+            stmt.execute("ALTER TABLE " + table + " ADD COLUMN currency TEXT NOT NULL DEFAULT 'GHS'");
         }
     }
 

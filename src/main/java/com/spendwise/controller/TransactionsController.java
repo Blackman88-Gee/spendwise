@@ -101,8 +101,8 @@ public class TransactionsController {
         categoryColumn.setCellValueFactory(data -> new SimpleStringProperty(data.getValue().getCategory().getName()));
         descriptionColumn.setCellValueFactory(data -> new SimpleStringProperty(data.getValue().getDescription()));
         amountColumn.setCellValueFactory(data -> new SimpleStringProperty(
-                String.format("%s$%.2f", data.getValue().getType() == TransactionType.EXPENSE ? "-" : "+",
-                        data.getValue().getAmount())));
+                String.format("%s%s", data.getValue().getType() == TransactionType.EXPENSE ? "-" : "+",
+                        data.getValue().getCurrency().format(data.getValue().getAmount()))));
 
         actionsColumn.setCellFactory(col -> new TableCell<>() {
             private final Button editButton = new Button("Edit");
@@ -143,9 +143,17 @@ public class TransactionsController {
     }
 
     private void updateSummary(List<Transaction> transactions) {
-        double net = transactions.stream().mapToDouble(Transaction::signedAmount).sum();
-        summaryLabel.setText(String.format("%d transactions — net %s$%.2f",
-                transactions.size(), net < 0 ? "-" : "+", Math.abs(net)));
+        StringBuilder text = new StringBuilder(transactions.size() + " transactions");
+        for (var currency : com.spendwise.model.Currency.values()) {
+            double net = transactions.stream()
+                    .filter(t -> t.getCurrency() == currency)
+                    .mapToDouble(Transaction::signedAmount)
+                    .sum();
+            if (net != 0) {
+                text.append(" — net ").append(net < 0 ? "-" : "+").append(currency.format(Math.abs(net)));
+            }
+        }
+        summaryLabel.setText(text.toString());
     }
 
     @FXML

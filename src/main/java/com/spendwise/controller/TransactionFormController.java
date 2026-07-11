@@ -2,6 +2,7 @@ package com.spendwise.controller;
 
 import com.spendwise.exception.ValidationException;
 import com.spendwise.model.Category;
+import com.spendwise.model.Currency;
 import com.spendwise.model.Expense;
 import com.spendwise.model.Income;
 import com.spendwise.model.Transaction;
@@ -22,6 +23,7 @@ public class TransactionFormController {
     @FXML private ComboBox<TransactionType> typeCombo;
     @FXML private ComboBox<Category> categoryCombo;
     @FXML private TextField amountField;
+    @FXML private ComboBox<Currency> currencyCombo;
     @FXML private TextField descriptionField;
     @FXML private DatePicker dateField;
     @FXML private Label errorLabel;
@@ -45,6 +47,20 @@ public class TransactionFormController {
         });
         typeCombo.setValue(TransactionType.EXPENSE);
         typeCombo.valueProperty().addListener((obs, oldVal, newVal) -> refreshCategoryOptions());
+
+        currencyCombo.setItems(FXCollections.observableArrayList(Currency.GHS, Currency.USD));
+        currencyCombo.setConverter(new StringConverter<>() {
+            @Override
+            public String toString(Currency currency) {
+                return currency == null ? "" : currency.name() + " (" + currency.getSymbol() + ")";
+            }
+
+            @Override
+            public Currency fromString(String string) {
+                return Currency.valueOf(string.split(" ")[0]);
+            }
+        });
+        currencyCombo.setValue(Currency.GHS);
 
         dateField.setValue(LocalDate.now());
         dateField.setDayCellFactory(picker -> new javafx.scene.control.DateCell() {
@@ -77,6 +93,7 @@ public class TransactionFormController {
         refreshCategoryOptions();
         categoryCombo.setValue(transaction.getCategory());
         amountField.setText(String.valueOf(transaction.getAmount()));
+        currencyCombo.setValue(transaction.getCurrency());
         descriptionField.setText(transaction.getDescription());
         dateField.setValue(transaction.getDate());
     }
@@ -98,10 +115,11 @@ public class TransactionFormController {
 
         String description = descriptionField.getText();
         LocalDate date = dateField.getValue();
+        Currency currency = currencyCombo.getValue();
 
         return type == TransactionType.INCOME
-                ? new Income(editingId, amount, description, category, date, null)
-                : new Expense(editingId, amount, description, category, date, null);
+                ? new Income(editingId, amount, currency, description, category, date, null)
+                : new Expense(editingId, amount, currency, description, category, date, null);
     }
 
     public void showError(String message) {

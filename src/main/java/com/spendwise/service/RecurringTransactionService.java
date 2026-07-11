@@ -47,8 +47,8 @@ public class RecurringTransactionService {
     private Transaction createTransactionFromRule(RecurringRule rule) {
         try {
             return rule.getType() == TransactionType.INCOME
-                    ? new Income(0, rule.getAmount(), rule.getDescription(), rule.getCategory(), rule.getNextDueDate(), rule.getId())
-                    : new Expense(0, rule.getAmount(), rule.getDescription(), rule.getCategory(), rule.getNextDueDate(), rule.getId());
+                    ? new Income(0, rule.getAmount(), rule.getCurrency(), rule.getDescription(), rule.getCategory(), rule.getNextDueDate(), rule.getId())
+                    : new Expense(0, rule.getAmount(), rule.getCurrency(), rule.getDescription(), rule.getCategory(), rule.getNextDueDate(), rule.getId());
         } catch (ValidationException e) {
             throw new DataAccessException("Recurring rule '" + rule.getDescription() + "' produced an invalid transaction", e);
         }

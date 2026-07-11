@@ -4,6 +4,7 @@ import com.spendwise.dao.BudgetRepository;
 import com.spendwise.dao.TransactionRepository;
 import com.spendwise.exception.BudgetExceededException;
 import com.spendwise.model.Budget;
+import com.spendwise.model.Currency;
 import com.spendwise.model.Expense;
 import com.spendwise.model.Transaction;
 import com.spendwise.model.TransactionType;
@@ -52,8 +53,14 @@ public class BudgetService {
         return statuses;
     }
 
-    /** Called before persisting a new expense so the UI can warn the user before they blow their budget. */
+    /**
+     * Called before persisting a new expense so the UI can warn the user before they blow their budget.
+     * Budgets track GHS spending only — a USD expense never counts against any budget.
+     */
     public void validateAgainstBudget(Expense expense) throws BudgetExceededException {
+        if (expense.getCurrency() != Currency.GHS) {
+            return;
+        }
         Optional<Budget> maybeBudget = budgetRepository.findByCategoryId(expense.getCategory().getId());
         if (maybeBudget.isEmpty()) {
             return;
@@ -67,7 +74,7 @@ public class BudgetService {
         if (projected > budget.getMonthlyLimit()) {
             double overspend = projected - budget.getMonthlyLimit();
             throw new BudgetExceededException(String.format(
-                    "This would put your '%s' spending at $%.2f, which is $%.2f over your $%.2f monthly budget.",
+                    "This would put your '%s' spending at GH₵%.2f, which is GH₵%.2f over your GH₵%.2f monthly budget.",
                     expense.getCategory().getName(), projected, overspend, budget.getMonthlyLimit()), overspend);
         }
     }
@@ -75,6 +82,7 @@ public class BudgetService {
     private double spentInCategory(List<Transaction> transactions, int categoryId) {
         return transactions.stream()
                 .filter(t -> t.getType() == TransactionType.EXPENSE)
+                .filter(t -> t.getCurrency() == Currency.GHS)
                 .filter(t -> t.getCategory().getId() == categoryId)
                 .mapToDouble(Transaction::getAmount)
                 .sum();

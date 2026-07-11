@@ -3,6 +3,7 @@ package com.spendwise.dao;
 import com.spendwise.exception.DataAccessException;
 import com.spendwise.exception.ValidationException;
 import com.spendwise.model.Category;
+import com.spendwise.model.Currency;
 import com.spendwise.model.Frequency;
 import com.spendwise.model.RecurringRule;
 import com.spendwise.model.TransactionType;
@@ -27,28 +28,30 @@ public class SqliteRecurringRuleRepository implements RecurringRuleRepository {
     @Override
     public RecurringRule save(RecurringRule rule) {
         String sql = rule.getId() == 0
-                ? "INSERT INTO recurring_rules (type, amount, description, category_id, frequency, next_due_date, active) VALUES (?, ?, ?, ?, ?, ?, ?)"
-                : "UPDATE recurring_rules SET type = ?, amount = ?, description = ?, category_id = ?, frequency = ?, next_due_date = ?, active = ? WHERE id = ?";
+                ? "INSERT INTO recurring_rules (type, amount, currency, description, category_id, frequency, next_due_date, active) VALUES (?, ?, ?, ?, ?, ?, ?, ?)"
+                : "UPDATE recurring_rules SET type = ?, amount = ?, currency = ?, description = ?, category_id = ?, frequency = ?, next_due_date = ?, active = ? WHERE id = ?";
 
         try (Connection conn = DatabaseManager.getConnection();
              PreparedStatement ps = conn.prepareStatement(sql, Statement.RETURN_GENERATED_KEYS)) {
             ps.setString(1, rule.getType().name());
             ps.setDouble(2, rule.getAmount());
-            ps.setString(3, rule.getDescription());
-            ps.setInt(4, rule.getCategory().getId());
-            ps.setString(5, rule.getFrequency().name());
-            ps.setString(6, rule.getNextDueDate().toString());
-            ps.setInt(7, rule.isActive() ? 1 : 0);
+            ps.setString(3, rule.getCurrency().name());
+            ps.setString(4, rule.getDescription());
+            ps.setInt(5, rule.getCategory().getId());
+            ps.setString(6, rule.getFrequency().name());
+            ps.setString(7, rule.getNextDueDate().toString());
+            ps.setInt(8, rule.isActive() ? 1 : 0);
             if (rule.getId() != 0) {
-                ps.setInt(8, rule.getId());
+                ps.setInt(9, rule.getId());
             }
             ps.executeUpdate();
 
             if (rule.getId() == 0) {
                 try (ResultSet keys = ps.getGeneratedKeys()) {
                     if (keys.next()) {
-                        return new RecurringRule(keys.getInt(1), rule.getType(), rule.getAmount(), rule.getDescription(),
-                                rule.getCategory(), rule.getFrequency(), rule.getNextDueDate(), rule.isActive());
+                        return new RecurringRule(keys.getInt(1), rule.getType(), rule.getAmount(), rule.getCurrency(),
+                                rule.getDescription(), rule.getCategory(), rule.getFrequency(), rule.getNextDueDate(),
+                                rule.isActive());
                     }
                 }
             }
@@ -74,7 +77,7 @@ public class SqliteRecurringRuleRepository implements RecurringRuleRepository {
 
     @Override
     public List<RecurringRule> findAll() {
-        String sql = "SELECT id, type, amount, description, category_id, frequency, next_due_date, active " +
+        String sql = "SELECT id, type, amount, currency, description, category_id, frequency, next_due_date, active " +
                 "FROM recurring_rules ORDER BY next_due_date";
         List<RecurringRule> results = new ArrayList<>();
         try (Connection conn = DatabaseManager.getConnection();
@@ -91,7 +94,7 @@ public class SqliteRecurringRuleRepository implements RecurringRuleRepository {
 
     @Override
     public List<RecurringRule> findDue(LocalDate asOf) {
-        String sql = "SELECT id, type, amount, description, category_id, frequency, next_due_date, active " +
+        String sql = "SELECT id, type, amount, currency, description, category_id, frequency, next_due_date, active " +
                 "FROM recurring_rules WHERE active = 1 AND next_due_date <= ?";
         List<RecurringRule> results = new ArrayList<>();
         try (Connection conn = DatabaseManager.getConnection();
@@ -117,6 +120,7 @@ public class SqliteRecurringRuleRepository implements RecurringRuleRepository {
                     rs.getInt("id"),
                     TransactionType.valueOf(rs.getString("type")),
                     rs.getDouble("amount"),
+                    Currency.valueOf(rs.getString("currency")),
                     rs.getString("description"),
                     category,
                     Frequency.valueOf(rs.getString("frequency")),

@@ -6,12 +6,17 @@ import java.time.LocalDate;
 
 public class Expense extends Transaction {
 
-    public Expense(int id, double amount, String description, Category category,
+    public Expense(int id, double amount, Currency currency, String description, Category category,
                    LocalDate date, Integer recurringRuleId) throws ValidationException {
-        super(id, amount, description, category, date, recurringRuleId);
+        super(id, amount, currency, description, category, date, recurringRuleId);
         if (category.getType() != TransactionType.EXPENSE) {
             throw new ValidationException("Category '" + category.getName() + "' is not an expense category");
         }
+    }
+
+    public Expense(int id, double amount, String description, Category category,
+                   LocalDate date, Integer recurringRuleId) throws ValidationException {
+        this(id, amount, Currency.GHS, description, category, date, recurringRuleId);
     }
 
     @Override

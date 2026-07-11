@@ -4,6 +4,7 @@ import com.spendwise.dao.CategoryRepository;
 import com.spendwise.dao.SqliteCategoryRepository;
 import com.spendwise.dao.SqliteTransactionRepository;
 import com.spendwise.dao.TransactionRepository;
+import com.spendwise.model.Currency;
 import com.spendwise.model.Insight;
 import com.spendwise.model.Transaction;
 import com.spendwise.model.TransactionType;
@@ -30,6 +31,7 @@ public class AnalyticsController {
     @FXML private Label pieEmptyLabel;
     @FXML private BarChart<String, Number> trendBarChart;
     @FXML private CategoryAxis trendXAxis;
+    @FXML private Label currencyNoteLabel;
     @FXML private VBox insightsContainer;
 
     private final CategoryRepository categoryRepository = new SqliteCategoryRepository();
@@ -41,12 +43,23 @@ public class AnalyticsController {
         populatePieChart();
         populateTrendChart();
         populateInsights();
+        populateCurrencyNote();
+    }
+
+    private void populateCurrencyNote() {
+        YearMonth thisMonth = YearMonth.now();
+        boolean hasUsdThisMonth = transactionRepository.findByDateRange(thisMonth.atDay(1), thisMonth.atEndOfMonth())
+                .stream().anyMatch(t -> t.getCurrency() == Currency.USD);
+        currencyNoteLabel.setText(hasUsdThisMonth
+                ? "Charts and insights track GHS only — you also have USD activity this month, visible in Transactions."
+                : "Charts and insights track GHS only.");
     }
 
     private void populatePieChart() {
         YearMonth thisMonth = YearMonth.now();
         List<Transaction> monthTransactions = transactionRepository.findByDateRange(
-                thisMonth.atDay(1), thisMonth.atEndOfMonth());
+                thisMonth.atDay(1), thisMonth.atEndOfMonth())
+                .stream().filter(t -> t.getCurrency() == Currency.GHS).toList();
 
         Map<String, Double> totals = new LinkedHashMap<>();
         for (Transaction t : monthTransactions) {
@@ -80,7 +93,8 @@ public class AnalyticsController {
         for (int i = 5; i >= 0; i--) {
             YearMonth month = current.minusMonths(i);
             List<Transaction> monthTransactions = transactionRepository.findByDateRange(
-                    month.atDay(1), month.atEndOfMonth());
+                    month.atDay(1), month.atEndOfMonth())
+                    .stream().filter(t -> t.getCurrency() == Currency.GHS).toList();
             double income = monthTransactions.stream()
                     .filter(t -> t.getType() == TransactionType.INCOME)
                     .mapToDouble(Transaction::getAmount).sum();

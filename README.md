@@ -7,6 +7,8 @@ Built for **INF811D: Object-Oriented Programming** (MSc Information Technology, 
 ## Features
 
 - **Transactions** — add, edit, delete, filter (category/date/search), and CSV export
+- **Import from Notes** — paste a free-form expense note (a date followed by that day's expenses) and get an editable review table before anything is saved, with keyword-based category guessing (e.g. "uber" → Transport, "jollof" → Dining Out)
+- **Multi-Currency (GHS/USD)** — every transaction carries its own currency; the Dashboard highlights whichever currency has more activity, while Budgets/Insights/Analytics stay GHS-focused
 - **Budgets** — per-category monthly limits with color-coded progress bars and an in-app warning before you save an expense that would blow a budget
 - **Recurring Transactions** — subscriptions/bills that auto-generate real transactions every time the app starts
 - **Analytics & Insights** — spending-by-category pie chart, 6-month income/expense trend, and a spending-harm insight engine that flags things like "you spent more than you earned" or "this category is up 30% from last month"
@@ -35,10 +37,11 @@ Built for **INF811D: Object-Oriented Programming** (MSc Information Technology, 
 ```
 src/main/java/com/spendwise/
 ├── App.java              # JavaFX entry point
-├── model/                 # Transaction hierarchy, Category, Budget, RecurringRule, Insight
+├── model/                 # Transaction hierarchy, Category, Budget, RecurringRule, Insight, Currency
 ├── dao/                   # Repository interfaces + SQLite implementations
-├── service/               # BudgetService, RecurringTransactionService, InsightEngine, ExportService
-└── controller/             # JavaFX FXML controllers
+├── service/               # BudgetService, RecurringTransactionService, InsightEngine,
+│                          # ExportService, ImportService (note-paste parser)
+└── controller/             # JavaFX FXML controllers (incl. ImportController/ImportRow)
 src/main/resources/com/spendwise/{fxml,css}/
 src/test/java/com/spendwise/    # JUnit 5 tests (model + service layers)
 ```

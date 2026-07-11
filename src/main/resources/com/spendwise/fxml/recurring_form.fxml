@@ -1,0 +1,47 @@
+<?xml version="1.0" encoding="UTF-8"?>
+
+<?import javafx.geometry.Insets?>
+<?import javafx.scene.control.CheckBox?>
+<?import javafx.scene.control.ComboBox?>
+<?import javafx.scene.control.DatePicker?>
+<?import javafx.scene.control.Label?>
+<?import javafx.scene.control.TextField?>
+<?import javafx.scene.layout.GridPane?>
+<?import javafx.scene.layout.VBox?>
+
+<VBox xmlns="http://javafx.com/javafx"
+      xmlns:fx="http://javafx.com/fxml"
+      fx:controller="com.spendwise.controller.RecurringFormController"
+      spacing="10" styleClass="form-root">
+    <padding>
+        <Insets top="4" right="4" bottom="4" left="4"/>
+    </padding>
+    <GridPane hgap="10" vgap="10">
+        <columnConstraints>
+            <javafx.scene.layout.ColumnConstraints minWidth="140"/>
+            <javafx.scene.layout.ColumnConstraints minWidth="220"/>
+        </columnConstraints>
+
+        <Label text="Type" GridPane.rowIndex="0" GridPane.columnIndex="0"/>
+        <ComboBox fx:id="typeCombo" GridPane.rowIndex="0" GridPane.columnIndex="1" maxWidth="Infinity"/>
+
+        <Label text="Category" GridPane.rowIndex="1" GridPane.columnIndex="0"/>
+        <ComboBox fx:id="categoryCombo" GridPane.rowIndex="1" GridPane.columnIndex="1" maxWidth="Infinity"/>
+
+        <Label text="Amount" GridPane.rowIndex="2" GridPane.columnIndex="0"/>
+        <TextField fx:id="amountField" GridPane.rowIndex="2" GridPane.columnIndex="1" promptText="0.00"/>
+
+        <Label text="Description" GridPane.rowIndex="3" GridPane.columnIndex="0"/>
+        <TextField fx:id="descriptionField" GridPane.rowIndex="3" GridPane.columnIndex="1" promptText="e.g. Netflix subscription"/>
+
+        <Label text="Frequency" GridPane.rowIndex="4" GridPane.columnIndex="0"/>
+        <ComboBox fx:id="frequencyCombo" GridPane.rowIndex="4" GridPane.columnIndex="1" maxWidth="Infinity"/>
+
+        <Label text="Next Due Date" GridPane.rowIndex="5" GridPane.columnIndex="0"/>
+        <DatePicker fx:id="nextDueDateField" GridPane.rowIndex="5" GridPane.columnIndex="1" maxWidth="Infinity"/>
+
+        <Label text="Active" GridPane.rowIndex="6" GridPane.columnIndex="0"/>
+        <CheckBox fx:id="activeCheckbox" GridPane.rowIndex="6" GridPane.columnIndex="1" selected="true"/>
+    </GridPane>
+    <Label fx:id="errorLabel" styleClass="form-error" wrapText="true"/>
+</VBox>

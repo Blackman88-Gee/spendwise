@@ -1,0 +1,33 @@
+<?xml version="1.0" encoding="UTF-8"?>
+
+<?import javafx.geometry.Insets?>
+<?import javafx.scene.control.ComboBox?>
+<?import javafx.scene.control.Label?>
+<?import javafx.scene.control.TextField?>
+<?import javafx.scene.layout.GridPane?>
+<?import javafx.scene.layout.VBox?>
+
+<VBox xmlns="http://javafx.com/javafx"
+      xmlns:fx="http://javafx.com/fxml"
+      fx:controller="com.spendwise.controller.BudgetFormController"
+      spacing="10" styleClass="form-root">
+    <padding>
+        <Insets top="4" right="4" bottom="4" left="4"/>
+    </padding>
+    <GridPane hgap="10" vgap="10">
+        <columnConstraints>
+            <javafx.scene.layout.ColumnConstraints minWidth="140"/>
+            <javafx.scene.layout.ColumnConstraints minWidth="220"/>
+        </columnConstraints>
+
+        <Label text="Category" GridPane.rowIndex="0" GridPane.columnIndex="0"/>
+        <ComboBox fx:id="categoryCombo" GridPane.rowIndex="0" GridPane.columnIndex="1" maxWidth="Infinity"/>
+
+        <Label text="Monthly Limit ($)" GridPane.rowIndex="1" GridPane.columnIndex="0"/>
+        <TextField fx:id="limitField" GridPane.rowIndex="1" GridPane.columnIndex="1" promptText="e.g. 300"/>
+
+        <Label text="Alert Threshold (%)" GridPane.rowIndex="2" GridPane.columnIndex="0"/>
+        <TextField fx:id="thresholdField" GridPane.rowIndex="2" GridPane.columnIndex="1" promptText="e.g. 80" text="80"/>
+    </GridPane>
+    <Label fx:id="errorLabel" styleClass="form-error" wrapText="true"/>
+</VBox>

@@ -23,6 +23,7 @@
     <HBox alignment="CENTER_LEFT" spacing="10">
         <Label text="Transactions" styleClass="screen-title"/>
         <Region HBox.hgrow="ALWAYS"/>
+        <Button text="Import from Notes" onAction="#onImportFromNotes"/>
         <Button text="+ Add Transaction" onAction="#onAddTransaction" styleClass="primary-button"/>
     </HBox>
 

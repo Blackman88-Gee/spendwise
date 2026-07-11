@@ -29,8 +29,11 @@ import javafx.scene.control.TableCell;
 import javafx.scene.control.TableColumn;
 import javafx.scene.control.TableView;
 import javafx.scene.control.TextField;
+import javafx.scene.Scene;
 import javafx.scene.layout.HBox;
 import javafx.stage.FileChooser;
+import javafx.stage.Modality;
+import javafx.stage.Stage;
 import javafx.stage.Window;
 import javafx.util.StringConverter;
 
@@ -157,6 +160,27 @@ public class TransactionsController {
     @FXML
     public void onAddTransaction() {
         openTransactionDialog(null);
+    }
+
+    @FXML
+    public void onImportFromNotes() {
+        try {
+            FXMLLoader loader = new FXMLLoader(getClass().getResource("/com/spendwise/fxml/import_dialog.fxml"));
+            Parent root = loader.load();
+
+            Stage stage = new Stage();
+            stage.setTitle("Import Expenses from Notes");
+            stage.initModality(Modality.APPLICATION_MODAL);
+            stage.initOwner(table.getScene().getWindow());
+            Scene scene = new Scene(root, 900, 620);
+            scene.getStylesheets().add(getClass().getResource("/com/spendwise/css/styles.css").toExternalForm());
+            stage.setScene(scene);
+            stage.showAndWait();
+
+            refreshTable();
+        } catch (IOException e) {
+            throw new IllegalStateException("Could not open import dialog", e);
+        }
     }
 
     @FXML

@@ -84,37 +84,39 @@ public final class DatabaseManager {
     }
 
     private static void seedDefaultCategories(Connection conn) throws SQLException {
-        String checkSql = "SELECT COUNT(*) FROM categories";
-        try (Statement check = conn.createStatement()) {
-            var rs = check.executeQuery(checkSql);
-            rs.next();
-            if (rs.getInt(1) > 0) {
-                return;
-            }
-        }
-
-        String insertSql = "INSERT INTO categories (name, type, color) VALUES (?, ?, ?)";
         Object[][] defaults = {
-                {"Salary", "INCOME", "#2E7D32"},
-                {"Freelance", "INCOME", "#43A047"},
-                {"Groceries", "EXPENSE", "#EF6C00"},
-                {"Dining Out", "EXPENSE", "#D84315"},
-                {"Transport", "EXPENSE", "#6D4C41"},
-                {"Rent", "EXPENSE", "#8E24AA"},
-                {"Utilities", "EXPENSE", "#3949AB"},
-                {"Entertainment", "EXPENSE", "#C2185B"},
-                {"Health", "EXPENSE", "#00897B"},
-                {"Shopping", "EXPENSE", "#F4511E"},
+                {"Salary", "INCOME", "#0F766E"},
+                {"Freelance", "INCOME", "#4F46E5"},
+                {"Groceries", "EXPENSE", "#D97706"},
+                {"Dining Out", "EXPENSE", "#DB2777"},
+                {"Transport", "EXPENSE", "#0284C7"},
+                {"Rent", "EXPENSE", "#9333EA"},
+                {"Utilities", "EXPENSE", "#0891B2"},
+                {"Entertainment", "EXPENSE", "#E11D48"},
+                {"Health", "EXPENSE", "#65A30D"},
+                {"Shopping", "EXPENSE", "#78716C"},
+                {"Uncategorized", "EXPENSE", "#9CA3AF"},
+                {"Uncategorized Income", "INCOME", "#9CA3AF"},
         };
 
-        try (var ps = conn.prepareStatement(insertSql)) {
+        String checkSql = "SELECT COUNT(*) FROM categories WHERE name = ?";
+        String insertSql = "INSERT INTO categories (name, type, color) VALUES (?, ?, ?)";
+        try (var check = conn.prepareStatement(checkSql); var insert = conn.prepareStatement(insertSql)) {
             for (Object[] row : defaults) {
-                ps.setString(1, (String) row[0]);
-                ps.setString(2, (String) row[1]);
-                ps.setString(3, (String) row[2]);
-                ps.addBatch();
+                check.setString(1, (String) row[0]);
+                boolean exists;
+                try (var rs = check.executeQuery()) {
+                    rs.next();
+                    exists = rs.getInt(1) > 0;
+                }
+                if (exists) {
+                    continue;
+                }
+                insert.setString(1, (String) row[0]);
+                insert.setString(2, (String) row[1]);
+                insert.setString(3, (String) row[2]);
+                insert.executeUpdate();
             }
-            ps.executeBatch();
         }
     }
 }

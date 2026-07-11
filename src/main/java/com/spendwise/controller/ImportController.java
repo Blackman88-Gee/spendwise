@@ -17,6 +17,7 @@ import com.spendwise.service.ImportService;
 import com.spendwise.service.ParsedExpense;
 import javafx.collections.FXCollections;
 import javafx.fxml.FXML;
+import javafx.scene.control.DatePicker;
 import javafx.scene.control.Label;
 import javafx.scene.control.TableCell;
 import javafx.scene.control.TableColumn;
@@ -30,7 +31,6 @@ import javafx.util.StringConverter;
 import javafx.util.converter.DoubleStringConverter;
 
 import java.time.LocalDate;
-import java.time.format.DateTimeFormatter;
 import java.util.ArrayList;
 import java.util.List;
 
@@ -71,18 +71,29 @@ public class ImportController {
         includeColumn.setCellFactory(CheckBoxTableCell.forTableColumn(includeColumn));
 
         dateColumn.setCellValueFactory(data -> data.getValue().dateProperty());
-        dateColumn.setCellFactory(TextFieldTableCell.forTableColumn(new StringConverter<>() {
-            @Override
-            public String toString(LocalDate date) {
-                return date == null ? "" : date.format(DateTimeFormatter.ISO_LOCAL_DATE);
+        dateColumn.setCellFactory(col -> new TableCell<ImportRow, LocalDate>() {
+            private final DatePicker picker = new DatePicker();
+
+            {
+                picker.setPrefWidth(115);
+                picker.valueProperty().addListener((obs, oldVal, newVal) -> {
+                    if (newVal != null && getIndex() >= 0 && getIndex() < getTableView().getItems().size()) {
+                        getTableView().getItems().get(getIndex()).dateProperty().set(newVal);
+                    }
+                });
             }
 
             @Override
-            public LocalDate fromString(String string) {
-                return LocalDate.parse(string.trim(), DateTimeFormatter.ISO_LOCAL_DATE);
+            protected void updateItem(LocalDate item, boolean empty) {
+                super.updateItem(item, empty);
+                if (empty) {
+                    setGraphic(null);
+                } else {
+                    picker.setValue(item);
+                    setGraphic(picker);
+                }
             }
-        }));
-        dateColumn.setOnEditCommit(event -> event.getRowValue().dateProperty().set(event.getNewValue()));
+        });
 
         typeColumn.setCellValueFactory(data -> data.getValue().typeProperty());
 

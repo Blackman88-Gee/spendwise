@@ -24,10 +24,17 @@ class ImportServiceTest {
         importService = new ImportService();
         categories = List.of(
                 new Category(1, "Salary", TransactionType.INCOME, "#0F766E"),
-                new Category(2, "Groceries", TransactionType.EXPENSE, "#D97706"),
-                new Category(3, "Transport", TransactionType.EXPENSE, "#0284C7"),
-                new Category(4, "Uncategorized", TransactionType.EXPENSE, "#9CA3AF"),
-                new Category(5, "Uncategorized Income", TransactionType.INCOME, "#9CA3AF"));
+                new Category(2, "Freelance", TransactionType.INCOME, "#4F46E5"),
+                new Category(3, "Groceries", TransactionType.EXPENSE, "#D97706"),
+                new Category(4, "Dining Out", TransactionType.EXPENSE, "#DB2777"),
+                new Category(5, "Transport", TransactionType.EXPENSE, "#0284C7"),
+                new Category(6, "Rent", TransactionType.EXPENSE, "#9333EA"),
+                new Category(7, "Utilities", TransactionType.EXPENSE, "#0891B2"),
+                new Category(8, "Entertainment", TransactionType.EXPENSE, "#E11D48"),
+                new Category(9, "Health", TransactionType.EXPENSE, "#65A30D"),
+                new Category(10, "Shopping", TransactionType.EXPENSE, "#78716C"),
+                new Category(11, "Uncategorized", TransactionType.EXPENSE, "#9CA3AF"),
+                new Category(12, "Uncategorized Income", TransactionType.INCOME, "#9CA3AF"));
     }
 
     @Test
@@ -97,5 +104,79 @@ class ImportServiceTest {
         List<ParsedExpense> rows = importService.parseNote(note, categories);
 
         assertEquals("Uncategorized", rows.get(0).category().getName());
+    }
+
+    @Test
+    void parsesOrdinalDateSharingALineWithItsFirstEntry() {
+        String note = """
+                24th June - Transfer in = Ghs 500 ( Senior Mike)
+                TNT to Accra = 10
+                """;
+
+        List<ParsedExpense> rows = importService.parseNote(note, categories);
+
+        assertEquals(2, rows.size());
+        assertEquals(Month.JUNE, rows.get(0).date().getMonth());
+        assertEquals(24, rows.get(0).date().getDayOfMonth());
+        assertEquals(TransactionType.INCOME, rows.get(0).type());
+        assertEquals(500.0, rows.get(0).amount(), 0.001);
+        assertTrue(rows.get(0).description().contains("Senior Mike"));
+
+        assertEquals(rows.get(0).date(), rows.get(1).date());
+        assertEquals("Transport", rows.get(1).category().getName());
+        assertEquals(10.0, rows.get(1).amount(), 0.001);
+    }
+
+    @Test
+    void ignoresParentheticalNumbersWhenExtractingAmount() {
+        String note = """
+                25th June - Cash in = Ghs 1,200 ( $100 taken from Petty cash USD)
+                """;
+
+        List<ParsedExpense> rows = importService.parseNote(note, categories);
+
+        assertEquals(1, rows.size());
+        assertEquals(1200.0, rows.get(0).amount(), 0.001);
+    }
+
+    @Test
+    void ignoresRunningTotalAfterSecondEqualsSign() {
+        String note = """
+                25th June - Cash in = Ghs 50 = Ghs 550
+                """;
+
+        List<ParsedExpense> rows = importService.parseNote(note, categories);
+
+        assertEquals(1, rows.size());
+        assertEquals(50.0, rows.get(0).amount(), 0.001);
+        assertTrue(rows.get(0).warning() != null && rows.get(0).warning().contains("550"));
+    }
+
+    @Test
+    void dateOnlyLineWithNoRemainderUpdatesDateWithoutCreatingARow() {
+        String note = """
+                26th June
+                Water for house = 150
+                """;
+
+        List<ParsedExpense> rows = importService.parseNote(note, categories);
+
+        assertEquals(1, rows.size());
+        assertEquals(26, rows.get(0).date().getDayOfMonth());
+        assertEquals(Month.JUNE, rows.get(0).date().getMonth());
+        assertEquals("Utilities", rows.get(0).category().getName());
+    }
+
+    @Test
+    void recognizesPersonalShorthandKeywordForTransport() {
+        String note = """
+                24th June
+                TNT= 15
+                """;
+
+        List<ParsedExpense> rows = importService.parseNote(note, categories);
+
+        assertEquals("Transport", rows.get(0).category().getName());
+        assertEquals(15.0, rows.get(0).amount(), 0.001);
     }
 }
